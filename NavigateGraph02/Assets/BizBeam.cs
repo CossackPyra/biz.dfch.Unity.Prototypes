@@ -17,4 +17,5 @@ public class BizBeam
     public int Start { get; set; }
     public int End { get; set; }
     public VisBeam Vis { get; set; }
+    public int BizType { get; set; }
 }

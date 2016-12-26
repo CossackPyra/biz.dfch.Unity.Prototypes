@@ -24,6 +24,13 @@ public class VisEntity : MonoBehaviour
 
     Main m_main;
     BizEntity m_entity;
+    public BizEntity Biz
+    {
+        get
+        {
+            return m_entity;
+        }
+    }
 
     public void Setup(Main main, BizEntity entity)
     {
