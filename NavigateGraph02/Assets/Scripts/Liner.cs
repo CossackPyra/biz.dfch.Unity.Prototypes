@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Liner : MonoBehaviour
 {
 
-
+    private const int NUM_STEPS = 20;
     public Material material;
 
     public GameObject[] points;
@@ -43,13 +43,13 @@ public class Liner : MonoBehaviour
             coef[k] = GetBinCoeff(n, k);
         }
 
-        int NUM = 20;
 
-        Vector3[] v1 = new Vector3[NUM + 1];
 
-        for (int i = 0; i <= NUM; i++)
+        Vector3[] v1 = new Vector3[NUM_STEPS + 1];
+
+        for (int i = 0; i <= NUM_STEPS; i++)
         {
-            float f1 = 1f * i / NUM;
+            float f1 = 1f * i / NUM_STEPS;
             float f2 = 1f - f1;
 
 
@@ -71,7 +71,7 @@ public class Liner : MonoBehaviour
             v1[i] = p1;
         }
 
-        lr1.SetVertexCount(NUM + 1);
+        lr1.SetVertexCount(NUM_STEPS + 1);
         lr1.SetPositions(v1);
         lr1.SetWidth(1f, 1f);
 
