@@ -9,6 +9,8 @@ public class Main : MonoBehaviour
     public GameObject PrefabLayer;
     public GameObject PrefabEntiry;
 
+    Cursor cursor;
+    public Material cursorMaterial;
     public Material beamMaterial;
     public Material greenBeamMaterial;
     int m_id;
@@ -21,13 +23,21 @@ public class Main : MonoBehaviour
 
     public float cameraDistance = 15f;
 
-	Vector3 cameraPos = Vector3.zero;
-	Vector3 cameraTarget = Vector3.zero;
-	Vector3 cameraVel = Vector3.zero;
+    Vector3 cameraPos = Vector3.zero;
+    Vector3 cameraTarget = Vector3.zero;
+    Vector3 cameraVel = Vector3.zero;
+
+
+    Vector3 cursorPos = Vector3.zero;
+    Vector3 cursorTarget = Vector3.zero;
+    Vector3 cursorVel = Vector3.zero;
 
     // Use this for initialization
     void Start()
     {
+        cursor = (new GameObject()).AddComponent<Cursor>() as Cursor;
+        cursor.Setup(cursorMaterial);
+
         int layer1 = CreateLayer("1");
         int root = CreateEntity(layer1, "r00t");
 
@@ -143,16 +153,25 @@ public class Main : MonoBehaviour
         {
             cameraDistance = 20f;
         }
-
+        BizEntity entity1 = entities[m_selectedEntity];
         {
             // Camera
-            BizEntity entity = entities[m_selectedEntity];
             // Camera.main.transform.position = entity.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
-            cameraTarget = entity.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
-			cameraVel += (cameraTarget - cameraPos) * Time.deltaTime;
-			cameraVel -= cameraVel * Time.deltaTime * 5f;
-			cameraPos += cameraVel * Time.deltaTime * 5f;
-			Camera.main.transform.position = cameraPos;
+            cameraTarget = entity1.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
+            cameraVel += (cameraTarget - cameraPos) * Time.deltaTime;
+            cameraVel -= cameraVel * Time.deltaTime * 5f;
+            cameraPos += cameraVel * Time.deltaTime * 5f;
+            Camera.main.transform.position = cameraPos;
+            cursor.transform.position = cameraPos;
+        }
+        {
+            // Cursor
+            // Camera.main.transform.position = entity.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
+            cursorTarget = entity1.Vis.transform.position;
+            cursorVel += (cursorTarget - cursorPos) * Time.deltaTime * 3f;
+            cursorVel -= cursorVel * Time.deltaTime * 5f;
+            cursorPos += cursorVel * Time.deltaTime * 5f;
+            cursor.transform.position = cursorPos;
         }
     }
 
@@ -300,7 +319,8 @@ public class Main : MonoBehaviour
             float angle = 0.7f * Mathf.PI * (arr1[1] - 1f) / arr1[0];
             float x = radius * Mathf.Cos(angle);
             float y = radius * Mathf.Sin(angle);
-            return new Vector3(-10f + x, -5f + y, 0f);
+            // return new Vector3(-10f + x, -5f + y, 0f);
+            return new Vector3(x, y, 0f);
         }
         else
         {
@@ -310,7 +330,8 @@ public class Main : MonoBehaviour
 
     public Vector3 GetPosForId(int id)
     {
-        Vector3 v1 = new Vector3(-10f, -5f, 0f) + 3f * Vector3.right * id + Vector3.up * (1f - Mathf.Sin(id * 11f)) * id;
+        // Vector3 v1 = new Vector3(-10f, -5f, 0f) + 3f * Vector3.right * id + Vector3.up * (1f - Mathf.Sin(id * 11f)) * id;
+        Vector3 v1 = 3f * Vector3.right * id + Vector3.up * (1f - Mathf.Sin(id * 11f)) * id;
         return v1;
     }
 

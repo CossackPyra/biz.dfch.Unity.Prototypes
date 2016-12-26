@@ -8,6 +8,7 @@
 	Category {
 	Cull Off
 		Blend SrcAlpha One
+		ZWrite Off
 		
 	SubShader {
 		Tags { "RenderType"="Opaque" }
