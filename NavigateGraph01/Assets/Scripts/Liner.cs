@@ -76,7 +76,7 @@ public class Liner : MonoBehaviour
 
 		lr1.widthCurve = curve;
 
-		lr1.widthMultiplier = 0.2f;
+		lr1.widthMultiplier = 0.1f;
 	}
 
 	void 		GenerateLine ()
