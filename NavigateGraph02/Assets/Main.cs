@@ -21,6 +21,10 @@ public class Main : MonoBehaviour
 
     public float cameraDistance = 15f;
 
+	Vector3 cameraPos = Vector3.zero;
+	Vector3 cameraTarget = Vector3.zero;
+	Vector3 cameraVel = Vector3.zero;
+
     // Use this for initialization
     void Start()
     {
@@ -143,7 +147,12 @@ public class Main : MonoBehaviour
         {
             // Camera
             BizEntity entity = entities[m_selectedEntity];
-            Camera.main.transform.position = entity.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
+            // Camera.main.transform.position = entity.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
+            cameraTarget = entity.Vis.transform.position + new Vector3(0f, 0f, -cameraDistance);
+			cameraVel += (cameraTarget - cameraPos) * Time.deltaTime;
+			cameraVel -= cameraVel * Time.deltaTime * 5f;
+			cameraPos += cameraVel * Time.deltaTime * 5f;
+			Camera.main.transform.position = cameraPos;
         }
     }
 
