@@ -18,6 +18,7 @@ public class Main : MonoBehaviour
     public Dictionary<int, BizEntity> entities = new Dictionary<int, BizEntity>();
 
     public Dictionary<int, BizBeam> beams = new Dictionary<int, BizBeam>();
+    public List<Electron> electrons = new List<Electron>();
 
     int m_selectedEntity;
 
@@ -173,6 +174,23 @@ public class Main : MonoBehaviour
             cursorPos += cursorVel * Time.deltaTime * 5f;
             cursor.transform.position = cursorPos;
         }
+
+        foreach(Electron electron in electrons)
+        {
+            electron.velocity += (electron.position1 - electron.position) * Time.deltaTime;
+            foreach(Electron electron1 in electrons)
+            {
+                if (electron != electron1)
+                {
+                    Vector3 v1 = electron.position - electron1.position;
+                    Vector3 nv1 = v1.normalized;
+                    float mag = v1.magnitude;
+                    electron.velocity += (nv1/mag)*Time.deltaTime;
+                }
+            }
+            electron.velocity -= electron.velocity * Time.deltaTime;
+            electron.position += electron.velocity * Time.deltaTime;
+        }
     }
 
     bool IsConnected(int id)
@@ -268,8 +286,15 @@ public class Main : MonoBehaviour
         GameObject go1 = new GameObject();
         Liner liner = go1.AddComponent<Liner>() as Liner;
 
-        liner.points = new GameObject[2]{
+        GameObject go2 = new GameObject();
+        Electron electron = go1.AddComponent<Electron>() as Electron;
+        Vector3 p2 = (startEntity.Vis.transform.position + endEntity.Vis.transform.position)/2f;
+        electron.Setup(p2);
+        electrons.Add(electron);
+
+        liner.points = new GameObject[3]{
             startEntity.Vis.gameObject,
+            electron.gameObject,
             endEntity.Vis.gameObject};
 
         if (type == 0)
